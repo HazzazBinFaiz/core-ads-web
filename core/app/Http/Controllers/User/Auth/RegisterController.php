@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
@@ -77,6 +78,8 @@ class RegisterController extends Controller
             'mobile' => 'required|regex:/^([0-9]*)$/',
             'password' => ['required','confirmed',$passwordValidation],
             'username' => 'required|unique:users|min:6',
+            'placement' => 'required|exists:users,username',
+            'placement_direction' => 'required|in:"left","right"',
             'captcha' => 'sometimes|required',
             'mobile_code' => 'required|in:'.$mobileCodes,
             'country_code' => 'required|in:'.$countryCodes,
@@ -90,6 +93,13 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
+
+        $placement = User::where(['username' => $request->get('placement')])->first();
+
+        if ($placement == null || User::where(['place_by' => $placement->id, 'place_direction' => $request->get('placement_direction')])->count() !== 0) {
+            $notify[] = ['error', 'Placement place is not free'];
+            return back()->withNotify($notify)->withInput($request->all());
+        }
 
         $request->session()->regenerateToken();
 
@@ -111,7 +121,7 @@ class RegisterController extends Controller
             return back()->withNotify($notify)->withInput();
         }
 
-        event(new Registered($user = $this->create($request->all())));
+        event(new Registered($user = $this->create($request->all(), $placement)));
 
         $this->guard()->login($user);
 
@@ -126,7 +136,7 @@ class RegisterController extends Controller
      * @param  array $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create(array $data, $placement)
     {
         $general = gs();
 
@@ -141,6 +151,9 @@ class RegisterController extends Controller
         $user->email = strtolower(trim($data['email']));
         $user->password = Hash::make($data['password']);
         $user->username = trim($data['username']);
+        $user->ref_by = $referUser ? $referUser->id : 0;
+        $user->place_by = $placement->id;
+        $user->place_direction = $data['placement_direction'];
         $user->ref_by = $referUser ? $referUser->id : 0;
         $user->country_code = $data['country_code'];
         $user->mobile = $data['mobile_code'].$data['mobile'];
@@ -241,7 +254,7 @@ class RegisterController extends Controller
         }
 
         $parentUser = User::find($user->ref_by);
-        
+
         if($parentUser){
             notify($parentUser, 'REFERRAL_JOIN', [
                 'ref_username' => $user->username
@@ -251,4 +264,4 @@ class RegisterController extends Controller
         return to_route('user.home');
     }
 
-} 
+}

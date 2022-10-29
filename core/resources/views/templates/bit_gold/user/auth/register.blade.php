@@ -79,6 +79,23 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label class="form-label">@lang('Placement')</label>
+                                        <input type="text" class="form-control form--control" name="placement" value="{{ old('placement', session('placement')) }}" required>
+                                    </div>
+                                </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">@lang('Placement Direction')</label>
+                                            <select name="placement_direction" class="form-control form-select">
+                                                    <option value="left" @if(old('placement_direction', session('direction')) == 'left') selected @endif>LEFT</option>
+                                                    <option value="right" @if(old('placement_direction', session('direction')) == 'right') selected @endif>RIGHT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label class="form-label">@lang('Password')</label>
                                         <input type="password" class="form-control form--control" name="password"
                                             required>

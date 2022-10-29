@@ -12,6 +12,7 @@ use App\Models\Subscriber;
 use App\Models\SupportMessage;
 use App\Models\SupportTicket;
 use App\Models\TimeSetting;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -19,12 +20,25 @@ use Illuminate\Support\Facades\Validator;
 
 class SiteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $reference = @$_GET['reference'];
         if ($reference) {
             session()->put('reference', $reference);
         }
+
+        if ($request->filled(['placement','direction'])) {
+            $placement = User::where(['username' => $request->get('placement')])->first();
+            if ($placement && User::where(['place_by' => $placement->id, 'place_direction' => $request->get('direction')])->count() === 0) {
+                session()->put('placement', $request->get('placement'));
+                session()->put('direction', $request->get('direction'));
+            } else {
+                return back()->withNotify([
+                    ['error', 'Placement place is not free.']
+                ]);
+            }
+        }
+
         $pageTitle = 'Home';
         $sections  = Page::where('tempname', $this->activeTemplate)->where('slug', '/')->first();
         return view($this->activeTemplate . 'home', compact('pageTitle', 'sections'));

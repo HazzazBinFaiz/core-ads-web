@@ -58,13 +58,27 @@ class User extends Authenticatable
         return $this->belongsTo(User::class,'ref_by');
     }
 
+    public function placement()
+    {
+        return $this->belongsTo(User::class,'place_by');
+    }
+
     public function referrals()
     {
         return $this->hasMany(User::class,'ref_by');
     }
 
+    public function children()
+    {
+        return $this->hasMany(User::class,'place_by');
+    }
+
     public function allReferrals(){
         return $this->referrals()->with('referrer');
+    }
+
+    public function allChildren(){
+        return $this->children()->with('children');
     }
 
     public function invests()
