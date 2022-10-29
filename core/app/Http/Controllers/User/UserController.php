@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Lib\FormProcessor;
 use App\Lib\GoogleAuthenticator;
 use App\Lib\HyipLab;
+use App\Models\AdminNotification;
 use App\Models\Deposit;
 use App\Models\Form;
 use App\Models\Invest;
 use App\Models\PromotionTool;
 use App\Models\Referral;
 use App\Models\SupportTicket;
+use App\Models\TimeSetting;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Withdrawal;
@@ -20,8 +22,15 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
+        if ($request->filled('activate')) {
+            if (auth()->user()->deposit_wallet < 10) {
+                $notify[] = ['error', 'Insufficient balance'];
+                return back()->withNotify($notify);
+            }
+            $this->activate();
+        }
         $data['pageTitle']     = 'Dashboard';
         $user                  = auth()->user();
         $data['user']          = $user;
@@ -70,6 +79,40 @@ class UserController extends Controller
             ->get();
 
         return view($this->activeTemplate . 'user.dashboard', $data);
+    }
+
+    protected function activate()
+    {
+        if (is_null(auth()->user()->activated_at)) {
+            $user = auth()->user();
+            $user->deposit_wallet -= 10;
+            $user->activated_at = now();
+            $user->save();
+
+            $trx                        = getTrx();
+            $transaction                = new Transaction();
+            $transaction->user_id       = $user->id;
+            $transaction->amount        = 10;
+            $transaction->post_balance  = $user->deposit_wallet;
+            $transaction->charge        = 0;
+            $transaction->trx_type      = '-';
+            $transaction->details       = 'Activation';
+            $transaction->trx           = $trx;
+            $transaction->wallet_type   = 'deposit_wallet';
+            $transaction->remark        = 'activation';
+            $transaction->save();
+
+            $direction = $user->place_direction;
+            $placement = $user->placement;
+            while ($placement && in_array($direction, ['left', 'right'])) {
+                if ($placement->activated_at) {
+                    $placement->{$direction.'_active'} += 1;
+                    $placement->save();
+                }
+                $direction = $placement->place_direction;
+                $placement = $placement->placement;
+            }
+        }
     }
 
     public function depositHistory(Request $request)

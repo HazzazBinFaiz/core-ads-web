@@ -6,7 +6,9 @@ use App\Lib\HyipLab;
 use App\Models\GeneralSetting;
 use App\Models\Invest;
 use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CronController extends Controller
 {
@@ -16,6 +18,10 @@ class CronController extends Controller
         $general            = GeneralSetting::first();
         $general->last_cron = $now;
         $general->save();
+
+        DB::transaction(function (){
+            $this->matching();
+        });
 
         $day    = strtolower(date('D'));
         $offDay = (array) $general->off_day;
@@ -93,6 +99,87 @@ class CronController extends Controller
                 'plan_name'    => @$invest->plan->name,
                 'post_balance' => showAmount($user->interest_wallet),
             ]);
+        }
+    }
+
+    protected function matching()
+    {
+        $lastMatching = \Illuminate\Support\Carbon::make(cache('_last_matching', now()->subDay()->toDateTimeString()));
+
+        if ($lastMatching->lessThanOrEqualTo(now()->subDay())) {
+            $totalMatched = 0;
+            $users = User::where('matched', '<', DB::raw('left_active'))->where('matched', '<', DB::raw('right_active'))->get();
+            $now = now()->toDateTimeString();
+
+            foreach ($users as $user) {
+                $matching = min($user->left_active, $user->right_active) - $user->matched;
+                if ($matching > 0) {
+                    $totalMatched += $matching;
+                }
+            }
+
+            $wallet = 'interest_wallet';
+
+            $todayActivated = User::whereBetween('activated_at', [$lastMatching, $now])->count();
+            if ($todayActivated > 0) {
+                $perMatching = ($todayActivated * 10 * .3)/ $totalMatched;
+                foreach ($users as $user) {
+                    $matching = min($user->left_active, $user->right_active) - $user->matched;
+                    if ($matching > 0) {
+                        $user->matching += $matching;
+                        $amount = $matching * $perMatching;
+                        $user->$wallet += $amount;
+                        $user->save();
+                        $trx                        = getTrx();
+                        $transaction                = new Transaction();
+                        $transaction->user_id       = $user->id;
+                        $transaction->amount        = $amount;
+                        $transaction->post_balance  = $user->$wallet;
+                        $transaction->charge        = 0;
+                        $transaction->trx_type      = '+';
+                        $transaction->details       = 'Matching bonus, count : '.$matching;
+                        $transaction->trx           = $trx;
+                        $transaction->wallet_type   = $wallet;
+                        $transaction->remark        = 'matching';
+                        $transaction->save();
+                    }
+                }
+            }
+
+            $todayInvested = Invest::whereBetween('created_at', [$lastMatching, $now])->sum('amount');
+            if ($todayInvested > 0) {
+                $perMatching = ($todayInvested * .04)/ $totalMatched;
+                foreach ($users as $user) {
+                    $matching = min($user->left_active, $user->right_active) - $user->matched;
+                    if ($matching > 0) {
+                        $amount = $matching * $perMatching;
+                        $user->$wallet += $amount;
+                        $user->save();
+                        $trx                        = getTrx();
+                        $transaction                = new Transaction();
+                        $transaction->user_id       = $user->id;
+                        $transaction->amount        = $amount;
+                        $transaction->post_balance  = $user->$wallet;
+                        $transaction->charge        = 0;
+                        $transaction->trx_type      = '+';
+                        $transaction->details       = 'Investment matching bonus';
+                        $transaction->trx           = $trx;
+                        $transaction->wallet_type   = $wallet;
+                        $transaction->remark        = 'investment_matching';
+                        $transaction->save();
+                    }
+                }
+            }
+
+            foreach ($users as $user) {
+                $matching = min($user->left_active, $user->right_active) - $user->matched;
+                if ($matching > 0) {
+                    $user->matching += $matching;
+                    $user->save();
+                }
+            }
+
+            cache()->put('_last_matching', now()->toDateTimeString());
         }
     }
 }

@@ -112,6 +112,9 @@
                                 <span class="caption">@lang('Deposit Wallet Balance')</span>
                                 <h4 class="currency-amount">{{ $general->cur_sym }}{{ getAmount($user->deposit_wallet) }}</h4>
                             </div>
+                            @if(auth()->user()->activated_at == null && getAmount($user->deposit_wallet) >= 10)
+                                <a class="btn btn-sm btn-success" href="{{ route('user.home', ['activate'=> true]) }}">{{ __('Activate') }}</a>
+                            @endif
                             <div class="icon ms-auto">
                                 <i class="las la-dollar-sign"></i>
                             </div>
