@@ -72,29 +72,29 @@
                         <table class="w-100">
                             <tr>
                                 <td colspan="4">
-                                    @include($activeTemplate.'.partials.under_tree_placement', ['user' => $placement])
+                                    @include($activeTemplate.'partials.user_tree_placement', ['user' => $placement])
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    @include($activeTemplate.'.partials.under_tree_placement', ['user' => $left = optional($placement)->left()])
+                                    @include($activeTemplate.'partials.user_tree_placement', ['user' => $left = optional($placement)->left()])
                                 </td>
                                 <td colspan="2">
-                                    @include($activeTemplate.'.partials.under_tree_placement', ['user' => $right = optional($placement)->right()])
+                                    @include($activeTemplate.'partials.user_tree_placement', ['user' => $right = optional($placement)->right()])
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    @include($activeTemplate.'.partials.under_tree_placement', ['user' => optional($left)->left()])
+                                    @include($activeTemplate.'partials.user_tree_placement', ['user' => optional($left)->left()])
                                 </td>
                                 <td>
-                                    @include($activeTemplate.'.partials.under_tree_placement', ['user' => optional($left)->right()])
+                                    @include($activeTemplate.'partials.user_tree_placement', ['user' => optional($left)->right()])
                                 </td>
                                 <td>
-                                    @include($activeTemplate.'.partials.under_tree_placement', ['user' => optional($right)->left()])
+                                    @include($activeTemplate.'partials.user_tree_placement', ['user' => optional($right)->left()])
                                 </td>
                                 <td>
-                                    @include($activeTemplate.'.partials.under_tree_placement', ['user' => optional($right)->right()])
+                                    @include($activeTemplate.'partials.user_tree_placement', ['user' => optional($right)->right()])
                                 </td>
 
                             </tr>
