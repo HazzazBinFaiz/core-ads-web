@@ -137,7 +137,6 @@ class CronController extends Controller
                 foreach ($users as $user) {
                     $matching = min($user->left_active, $user->right_active) - $user->matched;
                     if ($matching > 0) {
-                        $user->matching += $matching;
                         $amount = $matching * $perMatching;
                         $user->$wallet += $amount;
                         $user->save();
@@ -185,7 +184,7 @@ class CronController extends Controller
             foreach ($users as $user) {
                 $matching = min($user->left_active, $user->right_active) - $user->matched;
                 if ($matching > 0) {
-                    $user->matching += $matching;
+                    $user->matched += $matching;
                     $user->save();
                 }
             }
