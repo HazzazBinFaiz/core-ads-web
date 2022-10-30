@@ -1,12 +1,16 @@
-<ul @if($isFirst) class="firstList" @endif>
-    @foreach($user->allChildren as $under)
-        @if($loop->first)
-            @php $layer++ @endphp
-        @endif
-        <li>{{ $under->fullname }} ( {{ $under->username }} ) - ( {{ $under->place_direction }} )
-            @if(($under->allChildren->count()) > 0 && ($layer < $maxLevel))
-                @include($activeTemplate.'partials.under_tree_placement',['user'=>$under,'layer'=>$layer,'isFirst'=>false])
-            @endif
-        </li>
-    @endforeach
-</ul>
+<div class="w-100 d-flex justify-content-center">
+    <div @if($user)
+             style="cursor: pointer;" onclick="location.href = '{{ route('user.referrals', ['placement' => $user->username]) }}'" data-toggle="tree-tooltip"
+         title='
+         <div class="d-flex justify-content-between"><span>Refer UserID : </span><span>{{ optional($user->referrer)->username ?? 'N/A' }}</span></div>
+         <div class="d-flex justify-content-between"><span>Rank : </span><span>{{ \App\Lib\Rank::getRankName($user->rank) }}</span></div>
+         <div class="d-flex justify-content-between"><span>Actives : </span><span>{{ $user->matched + $user->left_active }} | {{ $user->matched + $user->right_active }}</span></div>
+         <div class="d-flex justify-content-between"><span>Matched : </span><span>{{ $user->matched }}</span></div>
+         '
+        @endif>
+        <div class="border d-flex justify-content-center">
+            <img @if(optional($user)->activated_at == null) class="inverse" @endif style="width: 4rem; height: 4rem;" src="/assets/images/globe.png"/>
+        </div>
+        <div>{{ optional($user)->username ?? 'N/A' }}</div>
+    </div>
+</div>

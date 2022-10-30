@@ -81,6 +81,16 @@ class User extends Authenticatable
         return $this->children()->with('children');
     }
 
+    public function right()
+    {
+        return $this->children()->where('place_direction', 'right')->first();
+    }
+
+    public function left()
+    {
+        return $this->children()->where('place_direction', 'left')->first();
+    }
+
     public function invests()
     {
         return $this->hasMany(Invest::class)->orderBy('id','desc');

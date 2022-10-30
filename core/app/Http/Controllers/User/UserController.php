@@ -270,12 +270,17 @@ class UserController extends Controller
         return to_route('user.home')->withNotify($notify);
     }
 
-    public function referrals()
+    public function referrals(Request $request)
     {
         $pageTitle = 'Referrals';
         $user      = auth()->user();
         $maxLevel  = Referral::max('level');
-        return view($this->activeTemplate . 'user.referrals', compact('pageTitle', 'user', 'maxLevel'));
+        if ($request->filled('placement')) {
+            $placement = User::where('username', $request->get('placement'))->firstOrFail();
+        } else {
+            $placement = auth()->user();
+        }
+        return view($this->activeTemplate . 'user.referrals', compact('pageTitle', 'user', 'maxLevel', 'placement'));
     }
 
     public function promotionalBanners()
