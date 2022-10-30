@@ -23,6 +23,10 @@ class CronController extends Controller
             $this->matching();
         });
 
+        DB::transaction(function (){
+            $this->rank();
+        });
+
         $day    = strtolower(date('D'));
         $offDay = (array) $general->off_day;
         if (array_key_exists($day, $offDay)) {
@@ -99,6 +103,13 @@ class CronController extends Controller
                 'plan_name'    => @$invest->plan->name,
                 'post_balance' => showAmount($user->interest_wallet),
             ]);
+        }
+    }
+
+    protected function rank()
+    {
+        foreach (\App\Lib\Rank::getRankAmountMap() as $rank => $amount) {
+            User::where('left_investment', '>=', $amount)->where('right_investment', '>=', $amount)->where('rank', '!=', $rank)->update(['rank' => $rank]);
         }
     }
 

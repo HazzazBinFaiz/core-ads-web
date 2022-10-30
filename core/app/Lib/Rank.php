@@ -38,4 +38,9 @@ class Rank
                 return 'N/A';
         }
     }
+
+    public static function getRankAmountMap()
+    {
+        return [450, 1350, 4050, 12150, 36450, 109350, 328050, 984150, 2952450];
+    }
 }

@@ -11,6 +11,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, Searchable;
 
+    protected $fillable = [
+        'rank'
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *

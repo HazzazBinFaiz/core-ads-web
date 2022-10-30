@@ -120,10 +120,17 @@ class HyipLab
             'interest_amount' => showAmount($interestAmount),
             'time' => $plan->lifetime == 1 ? 'lifetime' : $plan->repeat_time.' times',
             'time_name' => $plan->time_name,
-            'wallet_type'  => keyToTitle($wallet), 
+            'wallet_type'  => keyToTitle($wallet),
             'post_balance' => showAmount($user->$wallet),
         ]);
 
+        $placement = $user->placement;
+        $direction = $user->place_direction;
+        while($placement) {
+            $placement->{$direction.'_investment'} += $amount;
+            $direction = $placement->place_direction;
+            $placement = $placement->placement;
+        }
 
         $adminNotification = new AdminNotification();
         $adminNotification->user_id = $user->id;
