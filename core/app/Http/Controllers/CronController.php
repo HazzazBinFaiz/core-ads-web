@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Lib\HyipLab;
 use App\Models\GeneralSetting;
 use App\Models\Invest;
+use App\Models\InvestmentCommissionLog;
+use App\Models\MatchingCommissionLog;
+use App\Models\RankUpgradeLog;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
@@ -109,7 +112,14 @@ class CronController extends Controller
     protected function rank()
     {
         foreach (\App\Lib\Rank::getRankAmountMap() as $rank => $amount) {
-            User::where('left_investment', '>=', $amount)->where('right_investment', '>=', $amount)->where('rank', '!=', $rank)->update(['rank' => $rank]);
+            $users = User::where('left_investment', '>=', $amount)->where('right_investment', '>=', $amount)->where('rank', '!=', $rank)->get();
+            foreach ($users as $user) {
+                $user->update(['rank' => $rank]);
+                RankUpgradeLog::create([
+                    'user_id' => $user->id,
+                    'rank' => $rank,
+                ]);
+            }
         }
     }
 
@@ -140,6 +150,11 @@ class CronController extends Controller
                         $amount = $matching * $perMatching;
                         $user->$wallet += $amount;
                         $user->save();
+                        MatchingCommissionLog::create([
+                            'user_id' => $user->id,
+                            'amount' => $amount,
+                            'quantity' => $matching
+                        ]);
                         $trx                        = getTrx();
                         $transaction                = new Transaction();
                         $transaction->user_id       = $user->id;
@@ -165,6 +180,11 @@ class CronController extends Controller
                         $amount = $matching * $perMatching;
                         $user->$wallet += $amount;
                         $user->save();
+                        InvestmentCommissionLog::create([
+                            'user_id' => $user->id,
+                            'amount' => $amount,
+                            'quantity' => $matching
+                        ]);
                         $trx                        = getTrx();
                         $transaction                = new Transaction();
                         $transaction->user_id       = $user->id;

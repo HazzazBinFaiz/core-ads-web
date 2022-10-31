@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invest;
+use App\Models\InvestmentCommissionLog;
+use App\Models\MatchingCommissionLog;
 use App\Models\NotificationLog;
+use App\Models\RankUpgradeLog;
 use App\Models\Transaction;
 use App\Models\UserLogin;
 use Illuminate\Http\Request;
@@ -107,4 +110,48 @@ class ReportController extends Controller
         return view('admin.reports.invest_history', compact('pageTitle', 'invests', 'totalInvestCount', 'totalInvestAmount', 'totalPaid', 'shouldPay'));
     }
 
+    public function rankUpgradeHistory(Request $request)
+    {
+        $rankUpgradeLog = RankUpgradeLog::orderBy('id', 'desc')->with('user');
+        $pageTitle = 'Rank Upgrade History';
+        if ($request->search) {
+            $search    = $request->search;
+            $pageTitle = 'Rank Upgrade History - ' . $search;
+            $rankUpgradeLog = $rankUpgradeLog->whereHas('user', function ($query) use ($search) {
+                $query->where('username', $search);
+            });
+        }
+        $rankUpgradeLog = $rankUpgradeLog->paginate(getPaginate());
+        return view('admin.reports.rank', compact('pageTitle', 'rankUpgradeLog'));
+    }
+
+    public function matchingCommissionHistory(Request $request)
+    {
+        $matchingCommissionLogs = MatchingCommissionLog::orderBy('id', 'desc')->with('user');
+        $pageTitle = 'Matching Commission History';
+        if ($request->search) {
+            $search    = $request->search;
+            $pageTitle = 'Matching Commission History - ' . $search;
+            $matchingCommissionLogs = $matchingCommissionLogs->whereHas('user', function ($query) use ($search) {
+                $query->where('username', $search);
+            });
+        }
+        $matchingCommissionLogs = $matchingCommissionLogs->paginate(getPaginate());
+        return view('admin.reports.matching-commission', compact('pageTitle', 'matchingCommissionLogs'));
+    }
+
+    public function investmentCommissionHistory(Request $request)
+    {
+        $investmentCommissionLog = InvestmentCommissionLog::orderBy('id', 'desc')->with('user');
+        $pageTitle = 'Investment Commission History';
+        if ($request->search) {
+            $search    = $request->search;
+            $pageTitle = 'Investment Commission History - ' . $search;
+            $investmentCommissionLog = $investmentCommissionLog->whereHas('user', function ($query) use ($search) {
+                $query->where('username', $search);
+            });
+        }
+        $investmentCommissionLog = $investmentCommissionLog->paginate(getPaginate());
+        return view('admin.reports.investment-commission', compact('pageTitle', 'investmentCommissionLog'));
+    }
 }

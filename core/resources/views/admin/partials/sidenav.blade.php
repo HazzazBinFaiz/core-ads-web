@@ -368,6 +368,27 @@
                                 </a>
                             </li>
 
+                            <li class="sidebar-menu-item {{menuActive(['admin.report.matching-commission'])}}">
+                                <a href="{{route('admin.report.matching-commission')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Matching Commission History')</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-menu-item {{menuActive(['admin.report.investment-commission'])}}">
+                                <a href="{{route('admin.report.investment-commission')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Investment Commission History')</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-menu-item {{menuActive(['admin.report.rank'])}}">
+                                <a href="{{route('admin.report.rank')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Rank History')</span>
+                                </a>
+                            </li>
+
                             <li class="sidebar-menu-item {{menuActive('admin.report.notification.history')}}">
                                 <a href="{{route('admin.report.notification.history')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>

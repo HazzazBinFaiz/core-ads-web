@@ -194,6 +194,9 @@ Route::middleware('admin')->group(function () {
         Route::get('report/notification/history', 'notificationHistory')->name('report.notification.history');
         Route::get('report/email/detail/{id}', 'emailDetails')->name('report.email.details');
         Route::get('report/invest/history', 'investHistory')->name('report.invest.history');
+        Route::get('report/rank', 'rankUpgradeHistory')->name('report.rank');
+        Route::get('report/matching-commission', 'matchingCommissionHistory')->name('report.matching-commission');
+        Route::get('report/investment-commission', 'investmentCommissionHistory')->name('report.investment-commission');
     });
 
     //Invest report
