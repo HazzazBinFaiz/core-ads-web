@@ -96,9 +96,8 @@ class RegisterController extends Controller
 
         $placement = User::where(['username' => $request->get('placement')])->first();
 
-        if ($placement == null || User::where(['place_by' => $placement->id, 'place_direction' => $request->get('placement_direction')])->count() !== 0) {
-            $notify[] = ['error', 'Placement place is not free'];
-            return back()->withNotify($notify)->withInput($request->all());
+        while ($child = User::where(['place_by' => $placement->id, 'place_direction' => $request->get('placement_direction')])->first()) {
+            $placement = $child;
         }
 
         $request->session()->regenerateToken();

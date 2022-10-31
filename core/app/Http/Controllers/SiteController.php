@@ -29,12 +29,12 @@ class SiteController extends Controller
 
         if ($request->filled(['placement','direction'])) {
             $placement = User::where(['username' => $request->get('placement')])->first();
-            if ($placement && User::where(['place_by' => $placement->id, 'place_direction' => $request->get('direction')])->count() === 0) {
+            if ($placement) {
                 session()->put('placement', $request->get('placement'));
                 session()->put('direction', $request->get('direction'));
             } else {
                 return back()->withNotify([
-                    ['error', 'Placement place is not free.']
+                    ['error', 'Placement is invalid.']
                 ]);
             }
         }
