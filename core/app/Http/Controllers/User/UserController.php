@@ -19,19 +19,24 @@ use App\Models\User;
 use App\Models\Withdrawal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     public function home(Request $request)
     {
+        $justActivated = false;
         if ($request->filled('activate')) {
             if (auth()->user()->deposit_wallet < 10) {
                 $notify[] = ['error', 'Insufficient balance'];
                 return back()->withNotify($notify);
             }
-            $this->activate();
+            $justActivated = DB::transaction(function (){
+                return $this->activate();
+            });
         }
         $data['pageTitle']     = 'Dashboard';
+        $data['justActivated']     = $justActivated;
         $user                  = auth()->user();
         $data['user']          = $user;
         $data['totalInvest']   = Invest::where('user_id', auth()->id())->sum('amount');
@@ -112,7 +117,9 @@ class UserController extends Controller
                 $direction = $placement->place_direction;
                 $placement = $placement->placement;
             }
+            return true;
         }
+        return false;
     }
 
     public function depositHistory(Request $request)

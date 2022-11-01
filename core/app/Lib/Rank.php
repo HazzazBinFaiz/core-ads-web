@@ -18,21 +18,21 @@ class Rank
         switch ($rank) {
             case null:
                 return 'N/A';
-            case 0:
-                return 'START';
             case 1:
-                return 'SILVER START';
+                return 'START';
             case 2:
-                return 'PEARL START';
+                return 'SILVER START';
             case 3:
-                return 'GOLD START';
+                return 'PEARL START';
             case 4:
-                return 'EMERALD START';
+                return 'GOLD START';
             case 5:
-                return 'PLATINUM START';
+                return 'EMERALD START';
             case 6:
-                return 'DIAMOND START';
+                return 'PLATINUM START';
             case 7:
+                return 'DIAMOND START';
+            case 8:
                 return 'ROYAL DIAMOND';
             default:
                 return 'N/A';

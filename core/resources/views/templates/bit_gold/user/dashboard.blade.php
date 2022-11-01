@@ -196,6 +196,20 @@
                         </div><!-- d-widget-two end -->
                     </div>
                 </div><!-- row end -->
+                @if(auth()->user()->rank)
+                    <div class="col-sm-12 d-flex justify-content-center mt-4">
+                        <div class="col-xl-4 col-sm-6 mb-30">
+                            <div class="d-widget d-flex justify-content-between gap-5">
+                                <div class="left-content">
+                                    <span class="caption">@lang('Rank')</span>
+                                    <h4 class="currency-amount">
+                                        {{ \App\Lib\Rank::getRankName(auth()->user()->rank) }}
+                                    </h4>
+                                </div>
+                            </div><!-- d-widget-two end -->
+                        </div>
+                    </div>
+                @endif
                 <div class="row mt-50">
                     <div class="col-lg-12">
                         <div class="table-responsive--md">
@@ -295,4 +309,14 @@
             @endif
         })(jQuery);
  </script>
+    @if($justActivated)
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire(
+                'Congratulations !!!',
+                'Your account activated successfully!',
+                'success'
+            )
+        </script>
+    @endif
 @endpush
