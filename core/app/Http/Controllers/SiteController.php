@@ -39,6 +39,10 @@ class SiteController extends Controller
             }
         }
 
+        if ($reference) {
+            return redirect()->to('user/register');
+        }
+
         $pageTitle = 'Home';
         $sections  = Page::where('tempname', $this->activeTemplate)->where('slug', '/')->first();
         return view($this->activeTemplate . 'home', compact('pageTitle', 'sections'));
