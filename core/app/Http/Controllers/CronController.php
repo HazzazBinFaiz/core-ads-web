@@ -127,7 +127,8 @@ class CronController extends Controller
     {
         $lastMatching = \Illuminate\Support\Carbon::make(cache('_last_matching', now()->subDay()->toDateTimeString()));
 
-        if ($lastMatching->lessThanOrEqualTo(now()->subDay())) {
+//        if ($lastMatching->lessThanOrEqualTo(now()->subDay())) {
+        if ($lastMatching->lessThan(now())) {
             $totalMatched = 0;
             $users = User::where('matched', '<', DB::raw('left_active'))->where('matched', '<', DB::raw('right_active'))->get();
             $now = now()->toDateTimeString();
