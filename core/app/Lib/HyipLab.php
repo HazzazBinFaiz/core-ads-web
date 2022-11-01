@@ -128,6 +128,7 @@ class HyipLab
         $direction = $user->place_direction;
         while($placement) {
             $placement->{$direction.'_investment'} += $amount;
+            $placement->save();
             $direction = $placement->place_direction;
             $placement = $placement->placement;
         }
