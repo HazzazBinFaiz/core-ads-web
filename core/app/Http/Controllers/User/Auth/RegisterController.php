@@ -78,6 +78,7 @@ class RegisterController extends Controller
             'mobile' => 'required|regex:/^([0-9]*)$/',
             'password' => ['required','confirmed',$passwordValidation],
             'username' => 'required|unique:users|min:6',
+            'referrer' => 'required|exists:users,username',
             'placement' => 'required|exists:users,username',
             'placement_direction' => 'required|in:"left","right"',
             'captcha' => 'sometimes|required',
@@ -139,7 +140,7 @@ class RegisterController extends Controller
     {
         $general = gs();
 
-        $referBy = session()->get('reference');
+        $referBy = $data['referrer'];
         if ($referBy) {
             $referUser = User::where('username', $referBy)->first();
         } else {

@@ -79,6 +79,13 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label class="form-label">@lang('Referrer')</label>
+                                        <input type="text" class="form-control form--control" name="referrer" value="{{ old('referrer', session()->get('reference')) }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label class="form-label">@lang('Placement')</label>
                                         <input type="text" class="form-control form--control" name="placement" value="{{ old('placement', session('placement')) }}" required>
                                     </div>
