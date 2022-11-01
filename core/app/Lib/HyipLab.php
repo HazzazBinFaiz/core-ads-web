@@ -224,7 +224,7 @@ class HyipLab
                 'post_balance' => $refer->interest_wallet,
                 'charge' => 0,
                 'trx_type' => '+',
-                'details' => 'level '.$i.' Referral Commission From ' . $user->username,
+                'details' => 'generation '.$i.' Referral Commission From ' . $user->username,
                 'trx' => $trx,
                 'wallet_type' =>  'interest_wallet',
                 'remark'=>'referral_commission',
