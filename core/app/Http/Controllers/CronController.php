@@ -140,6 +140,8 @@ class CronController extends Controller
                 }
             }
 
+            if ($totalMatched === 0) return;
+
             $wallet = 'interest_wallet';
 
             $todayActivated = User::whereBetween('activated_at', [$lastMatching, $now])->count();
