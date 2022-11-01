@@ -16,6 +16,17 @@
                     </div>
                 @endif
 
+                @if (!$user->activated_at)
+                    <div class="alert border border--danger" role="alert">
+                        <div class="alert__icon d-flex align-items-center text--danger"><i
+                                class="fas fa-exclamation-triangle"></i></div>
+                        <p class="alert__message">
+                            <span class="fw-bold">@lang('Account inactive')</span><br>
+                            <small><i>@lang('Your account is inactive. Active with $10. ')</i></small>
+                        </p>
+                    </div>
+                @endif
+
                 @if ($user->deposits->where('status',1)->count() == 1 && !$user->invests->count())
                     <div class="alert border border--success" role="alert">
                         <div class="alert__icon d-flex align-items-center text--success"><i class="fas fa-check"></i>
