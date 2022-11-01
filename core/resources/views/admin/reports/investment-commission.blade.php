@@ -27,8 +27,8 @@
                                         <span class="small"> <a href="{{ route('admin.users.detail', $log->user_id) }}"><span>@</span>{{ @$log->user->username }}</a> </span>
                                     </td>
 
-                                    <td>{{ $general->cur_sym }}{{ showAmount($invest->amount) }}</td>
-                                    <td>{{ $invest->quantity }}</td>
+                                    <td>{{ $general->cur_sym }}{{ showAmount($log->amount) }}</td>
+                                    <td>{{ $log->quantity }}</td>
 
                                     <td>
                                         {{showDateTime($log->created_at) }} <br> {{diffForHumans($log->created_at) }}
