@@ -23,6 +23,11 @@ class InvestController extends Controller
         $plan   = Plan::where('status',1)->findOrFail($request->plan_id);
         $amount = $request->amount;
 
+        if ($user->activated_at == null) {
+            $notify[] = ['error','inactive account can not invest'];
+            return back()->withNotify($notify);
+        }
+
         //Check limit
         if($plan->fixed_amount > 0){
             if ($amount != $plan->fixed_amount) {
