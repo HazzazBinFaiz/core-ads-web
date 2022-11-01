@@ -88,6 +88,7 @@ class UserController extends Controller
 
     protected function activate()
     {
+        $general   = gs();
         if (is_null(auth()->user()->activated_at)) {
             $user = auth()->user();
             $user->deposit_wallet -= 10;
@@ -106,6 +107,22 @@ class UserController extends Controller
             $transaction->wallet_type   = 'deposit_wallet';
             $transaction->remark        = 'activation';
             $transaction->save();
+
+            if ($general->referral_activation_bonus > 0 && $referrer = $user->referrer) {
+                $transaction2                = new Transaction();
+                $transaction2->user_id       = $referrer->id;
+                $transaction2->amount        = $general->referral_activation_bonus;
+                $transaction2->post_balance  = $referrer->interest_wallet;
+                $transaction2->charge        = 0;
+                $transaction2->trx_type      = '+';
+                $transaction2->details       = 'Referral Activation Bonus';
+                $transaction2->trx           = getTrx();
+                $transaction2->wallet_type   = 'interest_wallet';
+                $transaction2->remark        = 'referral_activation';
+                $transaction2->save();
+                $referrer->interest_wallet += $general->referral_activation_bonus;
+                $referrer->save();
+            }
 
             $direction = $user->place_direction;
             $placement = $user->placement;

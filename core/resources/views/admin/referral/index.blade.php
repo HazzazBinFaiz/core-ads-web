@@ -18,7 +18,7 @@
                     <ul class="list-group list-group-flush">
                     @foreach($referrals->where('commission_type',$key) as $referral)
                         <li class="list-group-item d-flex flex-wrap justify-content-between">
-                            <span class="fw-bold">@lang('Level') {{ $referral->level }}</span>
+                            <span class="fw-bold">@lang('Generation') {{ $referral->level }}</span>
                             <span class="fw-bold">{{ $referral->percent }}%</span>
                         </li>
                     @endforeach
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>@lang('Number of Level')</label>
+                        <label>@lang('Number of Generation')</label>
                         <div class="input-group">
                             <input type="number" name="level" min="1" placeholder="Type a number & hit ENTER ↵" class="form-control">
                             <button type="button" class="btn btn--primary generate">@lang('Generate')</button>
@@ -116,7 +116,7 @@
                 for (i = 1; i <= numberOfLevel; i++){
                     html += `
                     <div class="input-group mb-3">
-                        <span class="input-group-text justify-content-center">@lang('Level') ${i}</span>
+                        <span class="input-group-text justify-content-center">@lang('Generation') ${i}</span>
                         <input type="hidden" name="level[]" value="${i}" required>
                         <input name="percent[]" class="form-control col-10" type="text" required placeholder="@lang('Commission Percentage')">
                         <button class="btn btn--danger input-group-text deleteBtn" type="button"><i class=\'la la-times\'></i></button>

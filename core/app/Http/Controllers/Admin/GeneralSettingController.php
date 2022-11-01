@@ -27,6 +27,7 @@ class GeneralSettingController extends Controller
             'cur_sym' => 'required|string|max:40',
             'base_color' => 'nullable', 'regex:/^[a-f0-9]{6}$/i',
             'timezone' => 'required',
+            'referral_activation_bonus' => 'required|numeric|gte:0',
         ]);
 
         $general                      = GeneralSetting::first();
@@ -37,6 +38,7 @@ class GeneralSettingController extends Controller
         $general->f_charge            = $request->f_charge;
         $general->p_charge            = $request->p_charge;
         $general->signup_bonus_amount = $request->signup_bonus_amount;
+        $general->referral_activation_bonus = $request->referral_activation_bonus ?? 0;
         $general->save();
 
         $timezoneFile = config_path('timezone.php');

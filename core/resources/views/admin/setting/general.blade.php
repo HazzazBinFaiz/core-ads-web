@@ -73,6 +73,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label>@lang('Referral Bonus on Activation')</label>
+                                    <div class="input-group">
+                                        <input class="form-control bal-charge" type="text" name="referral_activation_bonus" required value="{{ getAmount($general->referral_activation_bonus) }}">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
