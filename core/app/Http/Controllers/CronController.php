@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lib\HyipLab;
+use App\Lib\Rank;
 use App\Models\GeneralSetting;
 use App\Models\Invest;
 use App\Models\InvestmentCommissionLog;
@@ -115,6 +116,23 @@ class CronController extends Controller
             $users = User::where('left_investment', '>=', $amount)->where('right_investment', '>=', $amount)->where('rank', '!=', $rank)->get();
             foreach ($users as $user) {
                 $user->update(['rank' => $rank]);
+                $upgradeBonus = Rank::getUpgradeBonus($rank);
+                if ($upgradeBonus > 0) {
+                    $user->interest_wallet += $upgradeBonus;
+                    $user->save();
+                    $transaction                = new Transaction();
+                    $transaction->user_id       = $user->id;
+                    $transaction->amount        = $amount;
+                    $transaction->post_balance  = $user->interest_wallet;
+                    $transaction->charge        = 0;
+                    $transaction->trx_type      = '+';
+                    $transaction->details       = 'Upgraded to rank : '.Rank::getRankName($rank);
+                    $transaction->trx           = getTrx();
+                    $transaction->wallet_type   = 'interest_wallet';
+                    $transaction->remark        = 'rank_upgrade_commission';
+                    $transaction->save();
+                }
+
                 RankUpgradeLog::create([
                     'user_id' => $user->id,
                     'rank' => $rank,
