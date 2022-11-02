@@ -14,6 +14,11 @@ class InvestController extends Controller
 {
     public function invest(Request $request)
     {
+        if (Invest::where(['user_id' => auth()->id()])->count()) {
+            $notify[] = ['error','Only one investment is allowed in one account'];
+            return back()->withNotify($notify);
+        }
+
         $request->validate([
             'amount'        => 'required|min:0',
             'plan_id'       => 'required',
