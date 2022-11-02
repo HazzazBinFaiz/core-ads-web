@@ -66,6 +66,8 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::get('attachment-download/{fil_hash}','attachmentDownload')->name('attachment.download');
 
                 Route::get('referrals','referrals')->name('referrals');
+                Route::get('tree','tree')->name('tree');
+                Route::get('rank','rank')->name('rank');
 
                 Route::get('promotional-banners','promotionalBanners')->name('promotional.banner');
 

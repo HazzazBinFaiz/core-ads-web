@@ -299,12 +299,29 @@ class UserController extends Controller
         $pageTitle = 'Referrals';
         $user      = auth()->user();
         $maxLevel  = Referral::max('level');
+        $transactions = $user->transactions()->where('remark', 'referral_activation')->orderBy('id', 'desc')->limit(10)->get();
+        return view($this->activeTemplate . 'user.referrals', compact('pageTitle', 'user', 'maxLevel', 'transactions'));
+    }
+
+    public function tree(Request $request)
+    {
+        $pageTitle = 'Tree';
+        $user = auth()->user();
         if ($request->filled('placement')) {
             $placement = User::where('username', $request->get('placement'))->firstOrFail();
         } else {
             $placement = auth()->user();
         }
-        return view($this->activeTemplate . 'user.referrals', compact('pageTitle', 'user', 'maxLevel', 'placement'));
+        $transactions = $placement->transactions()->where('remark', 'generation_commission')->orderBy('id', 'desc')->limit(10)->get();
+        return view($this->activeTemplate . 'user.tree', compact('pageTitle', 'user', 'placement', 'transactions'));
+    }
+
+    public function rank(Request $request)
+    {
+        $pageTitle = 'Rank';
+        $user      = auth()->user();
+        $transactions = auth()->user()->transactions()->where('remark', 'rank_upgrade_commission')->orderBy('id', 'desc')->limit(10)->get();
+        return view($this->activeTemplate . 'user.rank', compact('pageTitle', 'user', 'transactions'));
     }
 
     public function promotionalBanners()

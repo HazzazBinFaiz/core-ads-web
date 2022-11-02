@@ -28,7 +28,13 @@
                                     <li><a href="{{ route('user.transactions') }}">@lang('Transactions')</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{{ route('user.referrals') }}">@lang('Referrals')</a></li>
+                            <li class="menu_has_children"><a href="#0">@lang('Leadership')</a>
+                                <ul class="sub-menu">
+                                    <li><a href="{{route('user.referrals')}}">@lang('Referrals')</a></li>
+                                    <li><a href="{{route('user.tree')}}">@lang('Tree')</a></li>
+                                    <li><a href="{{ route('user.rank') }}">@lang('Rank')</a></li>
+                                </ul>
+                            </li>
                             @if($general->promotional_tool)
                             <li><a href="{{ route('user.promotional.banner') }}">@lang('Promotional Tool')</a></li>
                             @endif
