@@ -227,7 +227,7 @@ class HyipLab
                 'details' => 'generation '.$i.' Referral Commission From ' . $user->username,
                 'trx' => $trx,
                 'wallet_type' =>  'interest_wallet',
-                'remark'=>'referral_commission',
+                'remark'=>'generation_commission',
                 'created_at'=>now()
             ];
 
