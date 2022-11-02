@@ -13,6 +13,7 @@
                             <tr>
                                 <th>@lang('User')</th>
                                 <th>@lang('Rank')</th>
+                                <th>@lang('Matched Investment')</th>
                                 <th>@lang('Achieved At')</th>
                             </tr>
                             </thead>
@@ -27,6 +28,7 @@
                                     </td>
 
                                     <td>{{ __(\App\Lib\Rank::getRankName($log->rank)) }}</td>
+                                    <td>{{ __(\App\Lib\Rank::getRankAmountMap()[$log->rank]) }}</td>
 
                                     <td>
                                         {{showDateTime($log->created_at) }} <br> {{diffForHumans($log->created_at) }}
