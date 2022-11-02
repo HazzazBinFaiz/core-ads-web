@@ -20,7 +20,7 @@
                             @csrf
 
                             <div class="form-group">
-                                <label for="username" class="form-label">@lang('Username or Email')</label>
+                                <label for="username" class="form-label">@lang('Username')</label>
                                 <input type="text" name="username" value="{{ old('username') }}"
                                     class="form-control form--control" required>
                             </div>

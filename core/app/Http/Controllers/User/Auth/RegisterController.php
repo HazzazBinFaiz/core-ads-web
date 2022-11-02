@@ -74,7 +74,7 @@ class RegisterController extends Controller
         $mobileCodes = implode(',',array_column($countryData, 'dial_code'));
         $countries = implode(',',array_column($countryData, 'country'));
         $validate = Validator::make($data, [
-            'email' => 'required|string|email|unique:users',
+            'email' => 'required|string|email',
             'mobile' => 'required|regex:/^([0-9]*)$/',
             'password' => ['required','confirmed',$passwordValidation],
             'username' => 'required|unique:users|min:6',
@@ -112,13 +112,6 @@ class RegisterController extends Controller
         if(!verifyCaptcha()){
             $notify[] = ['error','Invalid captcha provided'];
             return back()->withNotify($notify);
-        }
-
-
-        $exist = User::where('mobile',$request->mobile_code.$request->mobile)->first();
-        if ($exist) {
-            $notify[] = ['error', 'The mobile number already exists'];
-            return back()->withNotify($notify)->withInput();
         }
 
         event(new Registered($user = $this->create($request->all(), $placement)));
