@@ -117,6 +117,16 @@
         <div class="row justify-content-center">
             <div class="col-lg-12 mt-lg-0 mt-5">
                 <div class="row mb-none-30">
+                    <div class="col-xl-12 mb-30">
+                        <div class="d-flex justify-content-between gap-5 border border-primary p-2 rounded">
+                            <div class="left-content">
+                                <span class="caption">@lang('Username')</span>
+                            </div>
+                            <div class="text-right">
+                                <h4 class="currency-amount">{{ auth()->user()->username }}</h4>
+                            </div>
+                        </div><!-- d-widget-two end -->
+                    </div>
                     <div class="col-xl-4 col-sm-6 mb-30">
                         <div class="d-widget d-flex justify-content-between gap-5">
                             <div class="left-content">
