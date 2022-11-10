@@ -231,7 +231,7 @@ class CronController extends Controller
 
             $todayInvested = Invest::whereBetween('created_at', [$lastMatching, $now])->sum('amount');
             if ($todayInvested > 0) {
-                $perMatching = ($todayInvested * .04)/ $totalMatched;
+                $perMatching = ($todayInvested * .05)/ $totalMatched;
                 foreach ($users as $user) {
                     $matching = min($user->left_active, $user->right_active) - $user->matched;
                     if ($matching > 0) {
