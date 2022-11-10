@@ -4,6 +4,7 @@
          title='<div>
          <div class="d-flex justify-content-between"><span>Refer UserID : </span> <span>{{ optional($user->referrer)->username ?? 'N/A' }}</span></div>
          <div class="d-flex justify-content-between"><span>Invest Rank : </span><span>{{ \App\Lib\Rank::getRankName($user->rank) }}</span></div>
+         <div class="d-flex justify-content-between"><span>Joining Rank : </span><span>{{ \App\Lib\JoiningRank::getRankName($user->joining_rank) }}</span></div>
          <div class="d-flex justify-content-between"><span>Total : </span><span>{{ $user->left_investment }} | {{ $user->right_investment }}</span></div>
          <div class="d-flex justify-content-between"><span>Actives : </span><span>{{ $user->matched + $user->left_active }} | {{ $user->matched + $user->right_active }}</span></div>
          <div class="d-flex justify-content-between"><span>Inactive : </span><span>{{ $user->left_count - $user->left_active }} | {{ $user->right_count - $user->right_active }}</span></div>
