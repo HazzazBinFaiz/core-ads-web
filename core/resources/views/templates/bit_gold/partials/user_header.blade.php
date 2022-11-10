@@ -32,7 +32,8 @@
                                 <ul class="sub-menu">
                                     <li><a href="{{route('user.referrals')}}">@lang('Referrals')</a></li>
                                     <li><a href="{{route('user.tree')}}">@lang('Tree')</a></li>
-                                    <li><a href="{{ route('user.rank') }}">@lang('Rank')</a></li>
+                                    <li><a href="{{ route('user.rank') }}">@lang('Invest Rank')</a></li>
+                                    <li><a href="{{ route('user.joining-rank') }}">@lang('Joining Rank')</a></li>
                                 </ul>
                             </li>
                             @if($general->promotional_tool)

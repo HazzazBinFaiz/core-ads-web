@@ -196,20 +196,34 @@
                         </div><!-- d-widget-two end -->
                     </div>
                 </div><!-- row end -->
-                @if(auth()->user()->rank)
-                    <div class="col-sm-12 d-flex justify-content-center mt-4">
-                        <div class="col-xl-4 col-sm-6 mb-30">
+
+                <div class="col-sm-12 d-flex justify-content-center mt-4">
+                    @if(auth()->user()->rank)
+                        <div class="col-xl-4 col-sm-6 mb-30 mx-4">
                             <div class="d-widget d-flex justify-content-between gap-5">
                                 <div class="left-content">
-                                    <span class="caption">@lang('Rank')</span>
+                                    <span class="caption">@lang('Invest Rank')</span>
                                     <h4 class="currency-amount">
                                         {{ \App\Lib\Rank::getRankName(auth()->user()->rank) }}
                                     </h4>
                                 </div>
                             </div><!-- d-widget-two end -->
                         </div>
-                    </div>
-                @endif
+                    @endif
+                    @if(auth()->user()->joining_rank)
+                        <div class="col-xl-4 col-sm-6 mb-30 mx-4">
+                            <div class="d-widget d-flex justify-content-between gap-5">
+                                <div class="left-content">
+                                    <span class="caption">@lang('Joining Rank')</span>
+                                    <h4 class="currency-amount">
+                                        {{ \App\Lib\JoiningRank::getRankName(auth()->user()->joining_rank) }}
+                                    </h4>
+                                </div>
+                            </div><!-- d-widget-two end -->
+                        </div>
+                    @endif
+                </div>
+
                 <div class="row mt-50">
                     <div class="col-lg-12">
                         <div class="table-responsive--md">

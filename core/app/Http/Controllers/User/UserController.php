@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Lib\FormProcessor;
 use App\Lib\GoogleAuthenticator;
 use App\Lib\HyipLab;
+use App\Lib\JoiningRank;
 use App\Models\AdminNotification;
 use App\Models\Deposit;
 use App\Models\Form;

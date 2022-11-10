@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Lib\HyipLab;
+use App\Lib\JoiningRank;
 use App\Lib\Rank;
 use App\Models\GeneralSetting;
 use App\Models\Invest;
 use App\Models\InvestmentCommissionLog;
+use App\Models\JoiningRankUpgradeLog;
 use App\Models\MatchingCommissionLog;
 use App\Models\RankUpgradeLog;
 use App\Models\Transaction;
@@ -29,6 +31,10 @@ class CronController extends Controller
 
         DB::transaction(function (){
             $this->rank();
+        });
+
+        DB::transaction(function (){
+            $this->joiningRank();
         });
 
         $day    = strtolower(date('D'));
@@ -134,6 +140,37 @@ class CronController extends Controller
                 }
 
                 RankUpgradeLog::create([
+                    'user_id' => $user->id,
+                    'rank' => $rank,
+                ]);
+            }
+        }
+    }
+
+    protected function joiningRank()
+    {
+        foreach (\App\Lib\JoiningRank::getRankAccountMap() as $rank => $userCount) {
+            $users = User::where('left_active', '>=', $userCount)->where('right_active', '>=', $userCount)->where('joining_rank', '<', $rank)->get();
+            foreach ($users as $user) {
+                $user->update(['joining_rank' => $rank]);
+                $upgradeBonus = JoiningRank::getUpgradeBonus($rank);
+                if ($upgradeBonus > 0) {
+                    $user->interest_wallet += $upgradeBonus;
+                    $user->save();
+                    $transaction                = new Transaction();
+                    $transaction->user_id       = $user->id;
+                    $transaction->amount        = $upgradeBonus;
+                    $transaction->post_balance  = $user->interest_wallet;
+                    $transaction->charge        = 0;
+                    $transaction->trx_type      = '+';
+                    $transaction->details       = 'Upgraded to joining rank : '.Rank::getRankName($rank);
+                    $transaction->trx           = getTrx();
+                    $transaction->wallet_type   = 'interest_wallet';
+                    $transaction->remark        = 'joining_rank_upgrade_commission';
+                    $transaction->save();
+                }
+
+                JoiningRankUpgradeLog::create([
                     'user_id' => $user->id,
                     'rank' => $rank,
                 ]);
