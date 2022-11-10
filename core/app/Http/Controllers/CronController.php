@@ -152,7 +152,8 @@ class CronController extends Controller
         foreach (\App\Lib\JoiningRank::getRankAccountMap() as $rank => $userCount) {
             $users = User::where('left_active', '>=', $userCount)->where('right_active', '>=', $userCount)->where('joining_rank', '<', $rank)->get();
             foreach ($users as $user) {
-                $user->update(['joining_rank' => $rank]);
+                $user->joining_rank = $rank;
+                $user->save();
                 $upgradeBonus = JoiningRank::getUpgradeBonus($rank);
                 if ($upgradeBonus > 0) {
                     $user->interest_wallet += $upgradeBonus;
