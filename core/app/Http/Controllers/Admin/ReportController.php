@@ -36,7 +36,7 @@ class ReportController extends Controller
 
     public function generationTransaction(Request $request)
     {
-        $pageTitle    = 'Generation Transaction Logs';
+        $pageTitle    = 'Activation Generation Bonus';
         $transactions = Transaction::with('user')->where(['remark' => 'activation_generation_commission'])->orderBy('id', 'desc');
 
         if ($request->search) {

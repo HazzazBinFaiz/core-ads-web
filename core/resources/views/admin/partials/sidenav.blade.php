@@ -385,7 +385,7 @@
                             <li class="sidebar-menu-item {{menuActive(['admin.report.generation-transaction'])}}">
                                 <a href="{{route('admin.report.generation-transaction')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Generation Bonus')</span>
+                                    <span class="menu-title">@lang('Activation Generation Bonus')</span>
                                 </a>
                             </li>
 
