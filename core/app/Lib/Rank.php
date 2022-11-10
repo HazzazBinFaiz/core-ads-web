@@ -4,46 +4,46 @@ namespace App\Lib;
 
 class Rank
 {
-    public const STAR = 1;
-    public const SILVER_STAR = 2;
-    public const PEARL_STAR = 3;
-    public const GOLD_STAR = 4;
-    public const EMERALD_STAR = 5;
-    public const PLATINUM_STAR = 6;
-    public const ROYAL_STAR = 7;
-    public const DIAMOND = 8;
-    public const DIAMOND_STAR = 9;
-    public const ROYAL_DIAMOND = 10;
-    public const CROWN = 11;
-    public const CROWN_AMBASSADOR = 12;
+    public const ASSOCIATE = 1;
+    public const PROMOTER = 2;
+    public const CONSULTANT = 3;
+    public const DIRECTOR = 4;
+    public const BRONZE_DIRECTOR = 5;
+    public const RUBY_DIRECTOR = 6;
+    public const EMERALD_DIRECTOR = 7;
+    public const GOLD_DIRECTOR = 8;
+    public const DIAMOND = 9;
+    public const PLATINUM = 10;
+    public const TITANIUM = 11;
+    public const CROWN = 12;
 
     public static function getRankName($rank)
     {
         switch ($rank) {
             case 1:
-                return 'STAR';
+                return 'ASSOCIATE';
             case 2:
-                return 'SILVER STAR';
+                return 'PROMOTER';
             case 3:
-                return 'PEARL STAR';
+                return 'CONSULTANT';
             case 4:
-                return 'GOLD STAR';
+                return 'DIRECTOR';
             case 5:
-                return 'EMERALD STAR';
+                return 'BRONZE_DIRECTOR';
             case 6:
-                return 'PLATINUM STAR';
+                return 'RUBY_DIRECTOR';
             case 7:
-                return 'ROYAL STAR';
+                return 'EMERALD_DIRECTOR';
             case 8:
-                return 'DIAMOND';
+                return 'GOLD_DIRECTOR';
             case 9:
-                return 'DIAMOND STAR';
+                return 'DIAMOND';
             case 10:
-                return 'ROYAL DIAMOND';
+                return 'PLATINUM';
             case 11:
-                return 'CROWN';
+                return 'TITANIUM';
             case 12:
-                return 'CROWN AMBASSADOR';
+                return 'CROWN';
             default:
                 return 'N/A';
         }
@@ -52,36 +52,36 @@ class Rank
     public static function getRankAmountMap()
     {
         return [
-            self::STAR => 700,
-            self::SILVER_STAR => 2100,
-            self::PEARL_STAR => 6300,
-            self::GOLD_STAR => 18900,
-            self::EMERALD_STAR => 35000,
-            self::PLATINUM_STAR => 75000,
-            self::ROYAL_STAR => 150000,
-            self::DIAMOND => 300000,
-            self::DIAMOND_STAR => 750000,
-            self::ROYAL_DIAMOND => 1500000,
-            self::CROWN => 3000000,
-            self::CROWN_AMBASSADOR => 6500000,
+            self::ASSOCIATE => 500,
+            self::PROMOTER => 1250,
+            self::CONSULTANT => 2500,
+            self::DIRECTOR => 5000,
+            self::BRONZE_DIRECTOR => 10000,
+            self::RUBY_DIRECTOR => 15000,
+            self::EMERALD_DIRECTOR => 20000,
+            self::GOLD_DIRECTOR => 35000,
+            self::DIAMOND => 50000,
+            self::PLATINUM => 75000,
+            self::TITANIUM => 150000,
+            self::CROWN => 450000,
         ];
     }
 
     public static function getUpgradeBonus($rank)
     {
         return [
-            self::STAR => 60,
-            self::SILVER_STAR => 100,
-            self::PEARL_STAR => 250,
-            self::GOLD_STAR => 450,
-            self::EMERALD_STAR => 850,
-            self::PLATINUM_STAR => 2100,
-            self::ROYAL_STAR => 5100,
-            self::DIAMOND => 10200,
-            self::DIAMOND_STAR => 22500,
-            self::ROYAL_DIAMOND => 46500,
-            self::CROWN => 96000,
-            self::CROWN_AMBASSADOR => 200000,
+            self::ASSOCIATE => 35,
+            self::PROMOTER => 50,
+            self::CONSULTANT => 85,
+            self::DIRECTOR => 135,
+            self::BRONZE_DIRECTOR => 270,
+            self::RUBY_DIRECTOR => 405,
+            self::EMERALD_DIRECTOR => 700,
+            self::GOLD_DIRECTOR => 1200,
+            self::DIAMOND => 1500,
+            self::PLATINUM => 2000,
+            self::TITANIUM => 3500,
+            self::CROWN => 13000,
         ][$rank] ?? 0;
     }
 }
