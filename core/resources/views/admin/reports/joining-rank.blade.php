@@ -28,7 +28,7 @@
                                     </td>
 
                                     <td>{{ __(\App\Lib\JoiningRank::getRankName($log->joining_rank)) }}</td>
-                                    <td>{{ __(\App\Lib\Rank::getRankAmountMap()[$log->joingin_rank ?? 0]) }}</td>
+                                    <td>{{ __(\App\Lib\Rank::getRankAmountMap()[$log->joingin_rank] ?? 'Unknown') }}</td>
 
                                     <td>
                                         {{showDateTime($log->created_at) }} <br> {{diffForHumans($log->created_at) }}
