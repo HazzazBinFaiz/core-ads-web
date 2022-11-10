@@ -27,8 +27,8 @@
                                         <span class="small"> <a href="{{ route('admin.users.detail', $log->user_id) }}"><span>@</span>{{ @$log->user->username }}</a> </span>
                                     </td>
 
-                                    <td>{{ __(\App\Lib\JoiningRank::getRankName($log->joining_rank)) }}</td>
-                                    <td>{{ __(\App\Lib\Rank::getRankAmountMap()[$log->joingin_rank] ?? 'Unknown') }}</td>
+                                    <td>{{ __(\App\Lib\JoiningRank::getRankName($log->user->joining_rank)) }}</td>
+                                    <td>{{ __(\App\Lib\Rank::getRankAmountMap()[$log->user->joingin_rank] ?? 'Unknown') }}</td>
 
                                     <td>
                                         {{showDateTime($log->created_at) }} <br> {{diffForHumans($log->created_at) }}
