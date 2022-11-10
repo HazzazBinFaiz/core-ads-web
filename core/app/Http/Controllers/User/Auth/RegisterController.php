@@ -165,6 +165,7 @@ class RegisterController extends Controller
         $user->tv = 1;
         $user->save();
 
+        $this->updateUpperCount($user);
 
         $adminNotification = new AdminNotification();
         $adminNotification->user_id = $user->id;
@@ -204,6 +205,20 @@ class RegisterController extends Controller
 
 
         return $user;
+    }
+
+    public function updateUpperCount(User $user)
+    {
+        $direction = $user->place_direction;
+        $placement = $user->placement;
+        while ($placement && in_array($direction, ['left', 'right'])) {
+            if ($placement->activated_at) {
+                $placement->{$direction.'_count'} += 1;
+                $placement->save();
+            }
+            $direction = $placement->place_direction;
+            $placement = $placement->placement;
+        }
     }
 
     public function checkUser(Request $request){

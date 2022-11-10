@@ -68,6 +68,7 @@ Route::middleware('auth')->name('user.')->group(function () {
                 Route::get('referrals','referrals')->name('referrals');
                 Route::get('tree','tree')->name('tree');
                 Route::get('rank','rank')->name('rank');
+                Route::get('joining-rank','joiningRank')->name('joining-rank');
 
                 Route::get('promotional-banners','promotionalBanners')->name('promotional.banner');
 

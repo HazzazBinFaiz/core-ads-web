@@ -318,9 +318,17 @@ class UserController extends Controller
 
     public function rank(Request $request)
     {
-        $pageTitle = 'Rank';
+        $pageTitle = 'Invest Rank';
         $user      = auth()->user();
         $transactions = auth()->user()->transactions()->where('remark', 'rank_upgrade_commission')->orderBy('id', 'desc')->limit(10)->get();
+        return view($this->activeTemplate . 'user.rank', compact('pageTitle', 'user', 'transactions'));
+    }
+
+    public function joiningRank(Request $request)
+    {
+        $pageTitle = 'Joining Rank';
+        $user      = auth()->user();
+        $transactions = auth()->user()->transactions()->where('remark', 'joining_rank_upgrade_commission')->orderBy('id', 'desc')->limit(10)->get();
         return view($this->activeTemplate . 'user.rank', compact('pageTitle', 'user', 'transactions'));
     }
 
