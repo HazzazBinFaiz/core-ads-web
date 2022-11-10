@@ -128,7 +128,7 @@ class CronController extends Controller
                     $user->save();
                     $transaction                = new Transaction();
                     $transaction->user_id       = $user->id;
-                    $transaction->amount        = $amount;
+                    $transaction->amount        = $upgradeBonus;
                     $transaction->post_balance  = $user->interest_wallet;
                     $transaction->charge        = 0;
                     $transaction->trx_type      = '+';
