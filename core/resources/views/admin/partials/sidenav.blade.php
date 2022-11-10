@@ -382,10 +382,24 @@
                                 </a>
                             </li>
 
+                            <li class="sidebar-menu-item {{menuActive(['admin.report.generation-transaction'])}}">
+                                <a href="{{route('admin.report.generation-transaction')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Generation Bonus')</span>
+                                </a>
+                            </li>
+
                             <li class="sidebar-menu-item {{menuActive(['admin.report.rank'])}}">
                                 <a href="{{route('admin.report.rank')}}" class="nav-link">
                                     <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('Rank History')</span>
+                                    <span class="menu-title">@lang('Invest Rank History')</span>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-menu-item {{menuActive(['admin.report.joining-rank'])}}">
+                                <a href="{{route('admin.report.joining-rank')}}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Joining Rank History')</span>
                                 </a>
                             </li>
 

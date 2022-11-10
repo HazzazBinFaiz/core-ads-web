@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Invest;
 use App\Models\InvestmentCommissionLog;
+use App\Models\JoiningRankUpgradeLog;
 use App\Models\MatchingCommissionLog;
 use App\Models\NotificationLog;
 use App\Models\RankUpgradeLog;
@@ -31,6 +32,24 @@ class ReportController extends Controller
 
         $transactions = $transactions->filter(['trx_type', 'remark'])->dateFilter()->paginate(getPaginate());
         return view('admin.reports.transactions', compact('pageTitle', 'transactions', 'remarks'));
+    }
+
+    public function generationTransaction(Request $request)
+    {
+        $pageTitle    = 'Generation Transaction Logs';
+        $transactions = Transaction::with('user')->where(['remark' => 'generation_commission'])->orderBy('id', 'desc');
+
+        if ($request->search) {
+            $search       = request()->search;
+            $transactions = $transactions->where(function ($q) use ($search) {
+                $q->where('trx', 'like', "%$search%")->orWhereHas('user', function ($user) use ($search) {
+                    $user->where('username', 'like', "%$search%");
+                });
+            });
+        }
+
+        $transactions = $transactions->filter(['trx_type'])->dateFilter()->paginate(getPaginate());
+        return view('admin.reports.generation-transactions', compact('pageTitle', 'transactions'));
     }
 
     public function loginHistory(Request $request)
@@ -123,6 +142,21 @@ class ReportController extends Controller
         }
         $rankUpgradeLog = $rankUpgradeLog->paginate(getPaginate());
         return view('admin.reports.rank', compact('pageTitle', 'rankUpgradeLog'));
+    }
+
+    public function joiningRankUpgradeHistory(Request $request)
+    {
+        $rankUpgradeLog = JoiningRankUpgradeLog::orderBy('id', 'desc')->with('user');
+        $pageTitle = 'Joining Rank Upgrade History';
+        if ($request->search) {
+            $search    = $request->search;
+            $pageTitle = 'Joining Rank Upgrade History - ' . $search;
+            $rankUpgradeLog = $rankUpgradeLog->whereHas('user', function ($query) use ($search) {
+                $query->where('username', $search);
+            });
+        }
+        $rankUpgradeLog = $rankUpgradeLog->paginate(getPaginate());
+        return view('admin.reports.joining-rank', compact('pageTitle', 'rankUpgradeLog'));
     }
 
     public function matchingCommissionHistory(Request $request)
