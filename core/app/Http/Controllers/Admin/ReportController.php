@@ -37,10 +37,10 @@ class ReportController extends Controller
     public function generationTransaction(Request $request)
     {
         $pageTitle    = 'Generation Transaction Logs';
-        $transactions = Transaction::with('user')->where(['remark' => 'generation_commission'])->orderBy('id', 'desc');
+        $transactions = Transaction::with('user')->where(['remark' => 'activation_generation_commission'])->orderBy('id', 'desc');
 
         if ($request->search) {
-            $search       = request()->search;
+            $search   = request()->search;
             $transactions = $transactions->where(function ($q) use ($search) {
                 $q->where('trx', 'like', "%$search%")->orWhereHas('user', function ($user) use ($search) {
                     $user->where('username', 'like', "%$search%");

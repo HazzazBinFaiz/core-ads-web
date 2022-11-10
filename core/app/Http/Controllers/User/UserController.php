@@ -135,6 +135,33 @@ class UserController extends Controller
                 $direction = $placement->place_direction;
                 $placement = $placement->placement;
             }
+
+            $amount = 10;
+            $cursor = $user->placement;
+            $transactions = [];
+            foreach ([.7, .5, .4, .35, .35, .35, .35] as $generationPercentage) {
+                if (!$cursor) break;
+                $com = ($amount * $generationPercentage) / 100;
+                $cursor->interest_wallet += $com;
+                $cursor->save();
+                $transactions[] = [
+                    'user_id' => $cursor->id,
+                    'amount' => $com,
+                    'post_balance' => $cursor->interest_wallet,
+                    'charge' => 0,
+                    'trx_type' => '+',
+                    'details' => 'Generation Activation Commission From ' . $user->username,
+                    'trx' => getTrx(),
+                    'wallet_type' =>  'interest_wallet',
+                    'remark'=>'activation_generation_commission',
+                    'created_at'=>now()
+                ];
+                $cursor = $cursor->placement;
+            }
+            if (!empty($transactions)) {
+                Transaction::insert($transactions);
+            }
+
             return true;
         }
         return false;
