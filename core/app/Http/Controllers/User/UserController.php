@@ -137,7 +137,7 @@ class UserController extends Controller
             }
 
             $amount = 10;
-            $cursor = $user->placement;
+            $cursor = $user->referrer;
             $transactions = [];
             foreach ([.7, .5, .4, .35, .35, .35, .35] as $generationPercentage) {
                 if (!$cursor) break;
@@ -156,7 +156,7 @@ class UserController extends Controller
                     'remark'=>'activation_generation_commission',
                     'created_at'=>now()
                 ];
-                $cursor = $cursor->placement;
+                $cursor = $cursor->referrer;
             }
             if (!empty($transactions)) {
                 Transaction::insert($transactions);
