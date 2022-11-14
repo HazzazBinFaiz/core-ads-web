@@ -38,6 +38,12 @@ class WithdrawController extends Controller
             $notify[] = ['error', 'Today is holiday. You\'re unable to withdraw today'];
             return back()->withNotify($notify);
         }
+
+        if (!auth()->user()->activated_at) {
+            $notify[] = ['error', 'Inactive id can not withdraw'];
+            return back()->withNotify($notify);
+        }
+
         $this->validate($request, [
             'method_code' => 'required',
             'amount'      => 'required|numeric',
