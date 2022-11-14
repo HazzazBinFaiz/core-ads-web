@@ -212,10 +212,8 @@ class RegisterController extends Controller
         $direction = $user->place_direction;
         $placement = $user->placement;
         while ($placement && in_array($direction, ['left', 'right'])) {
-            if ($placement->activated_at) {
-                $placement->{$direction.'_count'} += 1;
-                $placement->save();
-            }
+            $placement->{$direction.'_count'} += 1;
+            $placement->save();
             $direction = $placement->place_direction;
             $placement = $placement->placement;
         }
